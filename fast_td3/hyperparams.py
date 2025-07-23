@@ -28,9 +28,9 @@ class BaseArgs:
     """whether to use wandb"""
     checkpoint_path: str = None
     """the path to the checkpoint file"""
-    num_envs: int = 128
+    num_envs: int = 32
     """the number of environments to run in parallel"""
-    num_eval_envs: int = 128
+    num_eval_envs: int = 32
     """the number of evaluation environments to run in parallel (only valid for MuJoCo Playground)"""
     total_timesteps: int = 150000
     """total timesteps of the experiments"""
@@ -42,7 +42,7 @@ class BaseArgs:
     """the learning rate of the critic at the end of training"""
     actor_learning_rate_end: float = 3e-4
     """the learning rate for the actor at the end of training"""
-    buffer_size: int = 1024 * 50
+    buffer_size: int = 256 * 50
     """the replay memory buffer size"""
     num_steps: int = 1
     """the number of steps to use for the multi-step return"""
@@ -303,7 +303,8 @@ class MTBenchArgs(BaseArgs):
     num_eval_envs: int = 4096
     gamma: float = 0.97
     num_steps: int = 8
-    compile_mode: str = "default"  # Multi-task training is not compatible with cudagraphs
+    # Multi-task training is not compatible with cudagraphs
+    compile_mode: str = "default"
 
 
 @dataclass
@@ -314,7 +315,8 @@ class MetaWorldMT10Args(MTBenchArgs):
     num_eval_envs: int = 4096
     num_steps: int = 8
     gamma: float = 0.97
-    compile_mode: str = "default"  # Multi-task training is not compatible with cudagraphs
+    # Multi-task training is not compatible with cudagraphs
+    compile_mode: str = "default"
 
 
 @dataclass
@@ -326,7 +328,8 @@ class MetaWorldMT50Args(MTBenchArgs):
     num_eval_envs: int = 8192
     num_steps: int = 8
     gamma: float = 0.99
-    compile_mode: str = "default"  # Multi-task training is not compatible with cudagraphs
+    # Multi-task training is not compatible with cudagraphs
+    compile_mode: str = "default"
 
 
 @dataclass
@@ -433,9 +436,9 @@ class LeapCubeRotateZAxisArgs(MuJoCoPlaygroundArgs):
 class IsaacLabArgs(BaseArgs):
     v_min: float = -10.0
     v_max: float = 10.0
-    buffer_size: int = 1024 * 10
-    num_envs: int = 4096
-    num_eval_envs: int = 4096
+    buffer_size: int = 512 * 10
+    num_envs: int = 1024
+    num_eval_envs: int = 128
     action_bounds: float = 1.0
     std_max: float = 0.4
     num_atoms: int = 251

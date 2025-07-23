@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import gymnasium as gym
 
-import humanoid_bench
 from gymnasium.wrappers import TimeLimit
 from stable_baselines3.common.vec_env import SubprocVecEnv
 import numpy as np
@@ -90,9 +89,9 @@ class HumanoidBenchEnv:
         return observations
 
     def render(self):
-        assert (
-            self.num_envs == 1
-        ), "Currently only supports single environment rendering"
+        assert self.num_envs == 1, (
+            "Currently only supports single environment rendering"
+        )
         return self.envs.render()
 
     def step(self, actions):

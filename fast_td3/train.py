@@ -59,7 +59,9 @@ def main():
     amp_device_type = (
         "cuda"
         if args.cuda and torch.cuda.is_available()
-        else "mps" if args.cuda and torch.backends.mps.is_available() else "cpu"
+        else "mps"
+        if args.cuda and torch.backends.mps.is_available()
+        else "cpu"
     )
     amp_dtype = torch.bfloat16 if args.amp_dtype == "bf16" else torch.float16
 
@@ -320,8 +322,11 @@ def main():
 
         # Run for a fixed number of steps
         for i in range(eval_envs.max_episode_steps):
-            with torch.no_grad(), autocast(
-                device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled
+            with (
+                torch.no_grad(),
+                autocast(
+                    device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled
+                ),
             ):
                 obs = normalize_obs(obs, update=False)
                 actions = actor(obs)
@@ -362,8 +367,11 @@ def main():
             render_env.state.info["command"] = jnp.array([[1.0, 0.0, 0.0]])
             renders = [render_env.state]
         for i in range(render_env.max_episode_steps):
-            with torch.no_grad(), autocast(
-                device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled
+            with (
+                torch.no_grad(),
+                autocast(
+                    device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled
+                ),
             ):
                 obs = normalize_obs(obs, update=False)
                 actions = actor(obs)
@@ -462,6 +470,7 @@ def main():
             critic_grad_norm = torch.tensor(0.0, device=device)
         scaler.step(q_optimizer)
         scaler.update()
+        # q_scheduler.step()
 
         logs_dict["critic_grad_norm"] = critic_grad_norm.detach()
         logs_dict["qf_loss"] = qf_loss.detach()
@@ -500,6 +509,7 @@ def main():
             actor_grad_norm = torch.tensor(0.0, device=device)
         scaler.step(actor_optimizer)
         scaler.update()
+        # actor_scheduler.step()
         logs_dict["actor_grad_norm"] = actor_grad_norm.detach()
         logs_dict["actor_loss"] = actor_loss.detach()
         return logs_dict
@@ -565,8 +575,9 @@ def main():
             start_time = time.time()
             measure_burnin = global_step
 
-        with torch.no_grad(), autocast(
-            device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled
+        with (
+            torch.no_grad(),
+            autocast(device_type=amp_device_type, dtype=amp_dtype, enabled=amp_enabled),
         ):
             norm_obs = normalize_obs(obs)
             actions = policy(obs=norm_obs, dones=dones)
@@ -722,8 +733,6 @@ def main():
                 )
 
         global_step += 1
-        actor_scheduler.step()
-        q_scheduler.step()
         pbar.update(1)
 
     save_params(
