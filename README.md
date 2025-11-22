@@ -11,6 +11,12 @@ For more information, please see our [project webpage](https://younggyo.me/fast_
 
 ## ❗ Updates
 
+- **[Sep/20/2025]** Added `data` directory that contains training logs used for plotting in the report.
+
+- **[Sep/17/2025]** Fixed an issue where `std_min` and `std_max` were not included in Actor config (credit: [@ningyuanz](https://github.com/ningyuanz)).
+
+- **[Aug/07/2025]** If you encounter an issue in reproducing the performance, try disabling `torch.compile`. Please use `--no_compile` in argument.
+
 - **[Jul/07/2025]** Added support for multi-GPU training! See [Multi-GPU Training](#multi-gpu-training) section for details. 
 
 - **[Jul/02/2025]** Optimized codebase to speed up training around 10-30% when using a single RTX 4090 GPU.
@@ -290,10 +296,10 @@ We would like to thank people who have helped throughout the project:
 ### FastTD3
 ```bibtex
 @article{seo2025fasttd3,
-  title     = {FastTD3: Simple, Fast, and Capable Reinforcement Learning for Humanoid Control},
-  author    = {Seo, Younggyo and Sferrazza, Carmelo and Geng, Haoran and Nauman, Michal and Yin, Zhao-Heng and Abbeel, Pieter},
-  booktitle = {preprint},
-  year      = {2025},
+  title={FastTD3: Simple, Fast, and Capable Reinforcement Learning for Humanoid Control},
+  author={Seo, Younggyo and Sferrazza, Carmelo and Geng, Haoran and Nauman, Michal and Yin, Zhao-Heng and Abbeel, Pieter},
+  journal={arXiv preprint arXiv:2505.22642},
+  year={2025}
 }
 ```
 
